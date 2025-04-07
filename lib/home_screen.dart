@@ -27,12 +27,24 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     _appLinks.uriLinkStream.listen((Uri? uri) {
       if (uri != null) {
-        final id = uri.pathSegments.last;
+        final data;
+        if (uri.pathSegments.length == 2 && uri.pathSegments[0] == 'profile') {
+          final id = uri.pathSegments[1];
+          data = "profile:$id";
+        } else if (uri.pathSegments.length == 2 &&
+            uri.pathSegments[0] == 'product') {
+          final id = uri.pathSegments[1];
+          {
+            data = "product:$id";
+          }
+        } else {
+          data = uri.pathSegments.last;
+        }
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => MyWidget(
-                      data: id,
+                      data: data,
                     )));
       }
     });

@@ -48,26 +48,35 @@
     <p id="load">Firebase SDK Loading&hellip;</p>
 
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-    const iosAppStoreLink = "https://apps.apple.com/us/app/אינק/id6447420384";
-      const androidPlayStoreLink = "https://play.google.com/store/apps/details?id=com.daraz.android";
-      const fallbackLink = "https://daraz.com";
+document.addEventListener('DOMContentLoaded', function () {
+  const iosAppStoreLink = "https://apps.apple.com/us/app/אינק/id6447420384";
+  const androidPlayStoreLink = "https://play.google.com/store/apps/details?id=com.daraz.android";
+  const fallbackLink = "https://daraz.com";
 
-      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-      let redirectUrl = fallbackLink;
+  const iosAppScheme = "inkapp://";  // Replace with your actual iOS app scheme
+  const androidAppScheme = "intent://#Intent;package=com.daraz.android;scheme=inkapp;end"; // Replace with real scheme/package
 
-      if (/android/i.test(userAgent)) {
-        redirectUrl = androidPlayStoreLink;
-      } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-        redirectUrl = iosAppStoreLink;
-      }
+  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
-      document.getElementById("manualLink").href = redirectUrl;
+  if (/android/i.test(userAgent)) {
+    // Try to open Android app using intent
+    window.location.href = androidAppScheme;
 
-      setTimeout(() => {
-        window.location.href = redirectUrl;
-      }, 1500);
-      });
-    </script>
+    setTimeout(() => {
+      window.location.href = androidPlayStoreLink;
+    }, 2000);
+  } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+    // Try to open iOS app
+    window.location = iosAppScheme;
+
+    setTimeout(() => {
+      window.location.href = iosAppStoreLink;
+    }, 2000);
+  } else {
+    // fallback for desktop or unsupported devices
+    window.location.href = fallbackLink;
+  }
+});
+</script>
   </body>
 </html>
